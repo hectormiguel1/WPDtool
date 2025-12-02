@@ -26,5 +26,6 @@ Note: For the ``-r`` switch, the unpacked WPD folder name is specified in the ex
 ## For Developers
 - This tool makes use of this following reference library:
 <br>**IMGBlibrary** - https://github.com/Surihix/IMGBlibrary
+<br>**NativeLogger** - https://github.com/hectormiguel1/NativeLogger
 
 - Refer to this [page](https://github.com/LR-Research-Team/Datalog/wiki/WPD-Pack-files) for information about the the WPD's file structure.
