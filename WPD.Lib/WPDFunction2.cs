@@ -3,6 +3,7 @@ using IMGBlibrary.Support;
 using System;
 using System.IO;
 using System.Text;
+using Native;
 using WPD.Extensions;
 
 namespace WPD
@@ -15,7 +16,7 @@ namespace WPD
 
             var outWPDfileName = Path.GetFileName(inWPDExtractedDir);
 
-            if (outWPDfileName.StartsWith("_"))
+            if (outWPDfileName.StartsWith('_'))
             {
                 outWPDfileName = outWPDfileName.Remove(0, 1);
             }
@@ -81,10 +82,7 @@ namespace WPD
                 {
                     SharedMethods.ErrorExit($"Specified record count is invalid in the {SharedMethods.RecordsList} file");
                 }
-
-                Console.WriteLine("");
-
-
+                
                 // Write all record names and extensions
                 // into the new wpd file
                 using (var outWpdRecordsWriter = new StreamWriter(outWPDfile, true, new UTF8Encoding(false)))
@@ -116,100 +114,90 @@ namespace WPD
 
                 // Copy in all record's data into the file
                 // and update the offsets
-                uint recordDataStartPos = 0;
 
-                using (var outWPDdataStream = new FileStream(outWPDfile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                using var outWPDdataStream = new FileStream(outWPDfile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                using var outWPDoffsetStream = new FileStream(outWPDfile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                using var outWPDoffsetReader = new BinaryReader(outWPDoffsetStream);
+                using var outWPDoffsetWriter = new BinaryWriter(outWPDoffsetStream);
+                
+                outWPDoffsetWriter.BaseStream.Position = 4;
+                outWPDoffsetWriter.WriteBytesUInt32(totalRecords, true);
+
+
+                uint readStartPos = 16;
+                uint writeStartPos = 32;
+                for (var o = 0; o < totalRecords; o++)
                 {
-                    using (var outWPDoffsetStream = new FileStream(outWPDfile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                    outWPDoffsetReader.BaseStream.Position = readStartPos;
+                    var currentRecordNameArray = outWPDoffsetReader.ReadBytesTillNull().ToArray();
+                    var currentRecordName = Encoding.UTF8.GetString(currentRecordNameArray);
+
+                    var recordNameAdjusted = SharedMethods.RemoveIllegalChars(currentRecordName);
+
+                    outWPDoffsetReader.BaseStream.Position = readStartPos + 24;
+                    var currentRecordExtn = "." + outWPDoffsetReader.ReadStringTillNull();
+
+                    if (currentRecordExtn.Equals("."))
                     {
-                        using (var outWPDoffsetReader = new BinaryReader(outWPDoffsetStream))
+                        currentRecordExtn = "";
+                    }
+
+                    var recordDataStartPos = (uint)outWPDdataStream.Length;
+                    outWPDoffsetWriter.BaseStream.Position = writeStartPos;
+                    outWPDoffsetWriter.WriteBytesUInt32(recordDataStartPos, true);
+
+                    var currentFile = Path.Combine(inWPDExtractedDir, recordNameAdjusted + currentRecordExtn);
+
+                    if (Enum.TryParse(currentRecordExtn.Replace(".", ""), false, out IMGBEnums.FileExtensions fileExtension) == true)
+                    {
+                        if (Directory.Exists(inWPDExtractedIMGBDir))
                         {
-                            using (var outWPDoffsetWriter = new BinaryWriter(outWPDoffsetStream))
-                            {
-                                outWPDoffsetWriter.BaseStream.Position = 4;
-                                outWPDoffsetWriter.WriteBytesUInt32(totalRecords, true);
-
-
-                                uint readStartPos = 16;
-                                uint writeStartPos = 32;
-                                for (int o = 0; o < totalRecords; o++)
-                                {
-                                    outWPDoffsetReader.BaseStream.Position = readStartPos;
-                                    var currentRecordNameArray = outWPDoffsetReader.ReadBytesTillNull().ToArray();
-                                    var currentRecordName = Encoding.UTF8.GetString(currentRecordNameArray);
-
-                                    var recordNameAdjusted = SharedMethods.RemoveIllegalChars(currentRecordName);
-
-                                    outWPDoffsetReader.BaseStream.Position = readStartPos + 24;
-                                    var currentRecordExtn = "." + outWPDoffsetReader.ReadStringTillNull();
-
-                                    if (currentRecordExtn.Equals("."))
-                                    {
-                                        currentRecordExtn = "";
-                                    }
-
-                                    recordDataStartPos = (uint)outWPDdataStream.Length;
-                                    outWPDoffsetWriter.BaseStream.Position = writeStartPos;
-                                    outWPDoffsetWriter.WriteBytesUInt32(recordDataStartPos, true);
-
-                                    var currentFile = Path.Combine(inWPDExtractedDir, recordNameAdjusted + currentRecordExtn);
-
-                                    if (Enum.TryParse(currentRecordExtn.Replace(".", ""), false, out IMGBEnums.FileExtensions fileExtension) == true)
-                                    {
-                                        if (Directory.Exists(inWPDExtractedIMGBDir))
-                                        {
-                                            IMGBRepack1.RepackIMGBType1(currentFile, outWPDImgbFile, inWPDExtractedIMGBDir, platform, true);
-                                        }
-                                    }
-
-                                    var currentFileSize = (uint)new FileInfo(currentFile).Length;
-
-                                    outWPDoffsetWriter.BaseStream.Position = writeStartPos + 4;
-                                    outWPDoffsetWriter.WriteBytesUInt32(currentFileSize, true);
-
-                                    using (var currentFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
-                                    {
-                                        currentFileStream.Position = 0;
-                                        currentFileStream.CopyStreamTo(outWPDdataStream, currentFileSize, false);
-                                    }
-
-                                    // Pad null bytes to make the next
-                                    // start position divisible by a 
-                                    // pad value
-                                    var currentPos = outWPDdataStream.Length;
-                                    var padValue = 4;
-                                    if (currentPos % padValue != 0)
-                                    {
-                                        var remainder = currentPos % padValue;
-                                        var increaseBytes = padValue - remainder;
-                                        var newPos = currentPos + increaseBytes;
-                                        var nullBytesAmount = newPos - currentPos;
-
-                                        outWPDdataStream.Seek(currentPos, SeekOrigin.Begin);
-                                        outWPDdataStream.PadNull((int)nullBytesAmount);
-                                    }
-
-                                    Console.WriteLine("Repacked " + currentFile);
-                                    Console.WriteLine("");
-
-                                    recordDataStartPos += currentFileSize;
-                                    readStartPos += 32;
-                                    writeStartPos += 32;
-                                }
-                            }
+                            IMGBRepack1.RepackIMGBType1(currentFile, outWPDImgbFile, inWPDExtractedIMGBDir, platform, true);
                         }
                     }
+
+                    var currentFileSize = (uint)new FileInfo(currentFile).Length;
+
+                    outWPDoffsetWriter.BaseStream.Position = writeStartPos + 4;
+                    outWPDoffsetWriter.WriteBytesUInt32(currentFileSize, true);
+
+                    using (var currentFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                    {
+                        currentFileStream.Position = 0;
+                        currentFileStream.CopyStreamTo(outWPDdataStream, currentFileSize, false);
+                    }
+
+                    // Pad null bytes to make the next
+                    // start position divisible by a 
+                    // pad value
+                    var currentPos = outWPDdataStream.Length;
+                    const int padValue = 4;
+                    if (currentPos % padValue != 0)
+                    {
+                        var remainder = currentPos % padValue;
+                        var increaseBytes = padValue - remainder;
+                        var newPos = currentPos + increaseBytes;
+                        var nullBytesAmount = newPos - currentPos;
+
+                        outWPDdataStream.Seek(currentPos, SeekOrigin.Begin);
+                        outWPDdataStream.PadNull((int)nullBytesAmount);
+                    }
+
+                    NativeLogger.Debug($"Repacked {currentFile}");
+
+                    recordDataStartPos += currentFileSize;
+                    readStartPos += 32;
+                    writeStartPos += 32;
                 }
             }
 
-            Console.WriteLine("");
-            Console.WriteLine("Finished repacking record files to " + "\"" + outWPDfileName + "\"");
+            NativeLogger.Info($"Finished repacking record files to \"{outWPDfile}\"");
         }
 
 
         private static void PadNullBytes(StreamWriter streamName, uint padding)
         {
-            for (int b = 0; b < padding; b++)
+            for (var b = 0; b < padding; b++)
             {
                 streamName.Write("\0");
             }

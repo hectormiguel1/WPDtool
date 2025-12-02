@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Native;
 
 namespace WPD
 {
@@ -7,9 +8,8 @@ namespace WPD
     {
         public static void ErrorExit(string errorMsg)
         {
-            Console.WriteLine(errorMsg);
-            Console.ReadLine();
-            Environment.Exit(1);
+            NativeLogger.Error(errorMsg);
+            throw new Exception(errorMsg);
         }
 
         public const string RecordsList = "!!WPD_Records.txt";

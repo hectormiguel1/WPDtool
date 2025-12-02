@@ -29,7 +29,7 @@ public static class BinaryReaderHelpers
     {
         var sb = new StringBuilder();
         char chars;
-        while ((chars = reader.ReadChar()) != default)
+        while ((chars = reader.ReadChar()) != 0)
         {
             sb.Append(chars);
         }
@@ -41,7 +41,7 @@ public static class BinaryReaderHelpers
     {
         var byteList = new List<byte>();
         byte currentValue;
-        while ((currentValue = reader.ReadByte()) != default)
+        while ((currentValue = reader.ReadByte()) != 0)
         {
             byteList.Add(currentValue);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Native;
 
 namespace WPD.Extensions;
 
@@ -25,7 +26,7 @@ internal static class StreamHelpers
 
             if (!showProgress) continue;
             var currentAmount = Math.Round(((decimal)amountCopied / size) * 100);
-            Console.Write("\r{0}", "Copied " + currentAmount + "%");
+            NativeLogger.Debug($"Copied {currentAmount}%");
         }
     }
 

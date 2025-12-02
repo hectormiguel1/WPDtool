@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Text;
 using WPD.Extensions;
-
+using Native;
 namespace WPD
 {
     public static class Unpacker
@@ -37,10 +37,7 @@ namespace WPD
                     platform = IMGBEnums.Platforms.x360;
                 }
             }
-
-
-            Console.WriteLine("");
-
+            
             using (var wpdStream = new FileStream(inWPDfile, FileMode.Open, FileAccess.Read))
             {
                 using (var wpdReader = new BinaryReader(wpdStream))
@@ -50,14 +47,15 @@ namespace WPD
 
                     if (!wpdHeader.Equals("WPD"))
                     {
-                        SharedMethods.ErrorExit("Error: Not a valid WPD file");
+                        NativeLogger.Error("Not a valid WPD file");
+                        throw new InvalidDataException("Not a valid WPD file");
                     }
 
                     wpdReader.BaseStream.Position = 4;
                     var totalRecords = wpdReader.ReadBytesUInt32(true);
                     uint readStartPos = 16;
 
-                    Console.WriteLine("Writing record list....");
+                    NativeLogger.Info("Writing record list....");
                     using (var recordListWriter = new StreamWriter(Path.Combine(extractWPDdir, SharedMethods.RecordsList), true, Encoding.UTF8))
                     {
                         recordListWriter.WriteLine(totalRecords);
@@ -84,9 +82,7 @@ namespace WPD
                             readStartPos += 32;
                         }
                     }
-
-                    Console.WriteLine("");
-
+                    
                     readStartPos = 16;
                     for (var f = 0; f < totalRecords; f++)
                     {
@@ -107,7 +103,7 @@ namespace WPD
                         currentRecordExtension = currentRecordExtension == "." ? "" : currentRecordExtension;
 
                         var currentOutFile = Path.Combine(extractWPDdir, recordNameAdjusted + currentRecordExtension);
-                        Console.WriteLine("Unpacking " + currentOutFile);
+                        NativeLogger.Debug("Unpacking " + currentOutFile);
 
                         using (var ofs = new FileStream(currentOutFile, FileMode.OpenOrCreate, FileAccess.Write))
                         {
@@ -123,18 +119,16 @@ namespace WPD
                             }
                         }
 
-                        Console.WriteLine("");
                         readStartPos += 32;
                     }
                 }
             }
 
-            Console.WriteLine("");
-            Console.WriteLine("Finished unpacking file " + "\"" + Path.GetFileName(inWPDfile) + "\"");
+            NativeLogger.Info($"Finished unpacking file \"{Path.GetFileName(inWPDfile)}\"");
         }
 
 
-        static void DeleteDirIfExists(string directoryName)
+        private static void DeleteDirIfExists(string directoryName)
         {
             if (Directory.Exists(directoryName))
             {

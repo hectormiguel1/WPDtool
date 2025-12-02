@@ -20,5 +20,14 @@
     <ItemGroup>
       <ProjectReference Include="..\..\IMGBlibrary\IMGBlibrary.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\NativeLogger\**\*.cs"
+                 LinkBase="NativeLogger" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Native\" />
+    </ItemGroup>
     
 </Project>
