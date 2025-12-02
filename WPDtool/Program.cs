@@ -44,7 +44,7 @@ public static class Program{
 
         try
         {
-            if (Enum.TryParse(args[0].Replace("-", ""), false, out ToolActions toolAction) == false)
+            if (!Enum.TryParse(args[0].Replace("-", ""), false, out ToolActions toolAction))
             {
                 SharedMethods.ErrorExit("Error: Proper tool action is not specified\nMust be '-u' for unpacking or '-r' for repacking.");
             }
@@ -56,7 +56,7 @@ public static class Program{
                     {
                         SharedMethods.ErrorExit("Error: Specified WPD file does not exist.");
                     }
-                    Unpacker.Unpack(args[1]);
+                    Actions.Unpack(args[1]);
                     break;
 
                 case ToolActions.r:
@@ -64,7 +64,7 @@ public static class Program{
                     {
                         SharedMethods.ErrorExit("Error: Specified unpacked directory to repack, does not exist.");
                     }
-                    Repacker.Repack(args[1]);
+                    Actions.Repack(args[1]);
                     break;
             }
         }

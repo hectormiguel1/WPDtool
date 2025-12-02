@@ -1,3 +1,0 @@
-/home/hectorr/Development/C#/WPDTool/WPDtool/bin/Release/net9.0/linux-x64/publish/WPDtool
-/home/hectorr/Development/C#/WPDTool/WPDtool/bin/Release/net9.0/linux-x64/publish/WPD.Lib.pdb
-/home/hectorr/Development/C#/WPDTool/WPDtool/bin/Release/net9.0/linux-x64/publish/IMGBlibrary.pdb

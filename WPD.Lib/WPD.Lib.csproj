@@ -25,9 +25,5 @@
         <Compile Include="..\NativeLogger\**\*.cs"
                  LinkBase="NativeLogger" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Native\" />
-    </ItemGroup>
     
 </Project>
