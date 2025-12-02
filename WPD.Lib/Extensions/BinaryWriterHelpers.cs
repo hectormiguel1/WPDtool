@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+namespace WPD.Extensions;
+
 internal static class BinaryWriterHelpers
 {
     public static void WriteBytesUInt32(this BinaryWriter writerName, uint valueToWrite, bool isBigEndian)

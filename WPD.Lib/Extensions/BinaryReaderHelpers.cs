@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+namespace WPD.Extensions;
+
 public static class BinaryReaderHelpers
 {
     public static uint ReadBytesUInt32(this BinaryReader reader, bool isBigEndian)

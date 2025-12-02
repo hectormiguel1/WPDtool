@@ -3,12 +3,13 @@ using IMGBlibrary.Unpack;
 using System;
 using System.IO;
 using System.Text;
+using WPD.Extensions;
 
-namespace WPDtool
+namespace WPD
 {
-    internal partial class WPD
+    public static class Unpacker
     {
-        public static void UnpackWPD(string inWPDfile)
+        public static void Unpack(string inWPDfile)
         {
             var wpdFileName = Path.GetFileName(inWPDfile);
             var wpdFileDir = Path.GetDirectoryName(inWPDfile);
@@ -33,7 +34,7 @@ namespace WPDtool
                 }
                 else if (wpdFileName.EndsWith("x360.imgb"))
                 {
-                    platform = IMGBEnums.Platforms.ps3;
+                    platform = IMGBEnums.Platforms.x360;
                 }
             }
 
@@ -87,7 +88,7 @@ namespace WPDtool
                     Console.WriteLine("");
 
                     readStartPos = 16;
-                    for (int f = 0; f < totalRecords; f++)
+                    for (var f = 0; f < totalRecords; f++)
                     {
                         wpdReader.BaseStream.Position = readStartPos;
                         var currentRecordNameArray = wpdReader.ReadBytesTillNull().ToArray();

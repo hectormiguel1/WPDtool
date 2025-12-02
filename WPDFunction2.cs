@@ -3,6 +3,7 @@ using IMGBlibrary.Support;
 using System;
 using System.IO;
 using System.Text;
+using WPDtool.Extensions;
 
 namespace WPDtool
 {

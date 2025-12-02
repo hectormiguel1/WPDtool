@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "gU9pSVJt9ho=",
+  "success": true,
+  "projectFilePath": "/home/hectorr/Development/C#/WPDTool/WPDtool/WPDtool.csproj",
+  "expectedPackageFiles": [
+    "/home/hectorr/.nuget/packages/microsoft.dotnet.ilcompiler/9.0.9/microsoft.dotnet.ilcompiler.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/microsoft.net.illink.tasks/9.0.9/microsoft.net.illink.tasks.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/runtime.linux-x64.microsoft.dotnet.ilcompiler/9.0.9/runtime.linux-x64.microsoft.dotnet.ilcompiler.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/system.text.encoding.codepages/10.0.0/system.text.encoding.codepages.10.0.0.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/9.0.9/microsoft.netcore.app.runtime.linux-x64.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.9/microsoft.aspnetcore.app.ref.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/9.0.9/microsoft.aspnetcore.app.runtime.linux-x64.9.0.9.nupkg.sha512",
+    "/home/hectorr/.nuget/packages/runtime.linux-x64.microsoft.dotnet.ilcompiler/9.0.9/runtime.linux-x64.microsoft.dotnet.ilcompiler.9.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
