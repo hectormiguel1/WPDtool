@@ -26,7 +26,7 @@ internal static class StreamHelpers
 
             if (!showProgress) continue;
             var currentAmount = Math.Round(((decimal)amountCopied / size) * 100);
-            NativeLogger.Debug($"Copied {currentAmount}%");
+            Log.Debug($"Copied {currentAmount}%");
         }
     }
 

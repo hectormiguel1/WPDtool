@@ -20,8 +20,17 @@
 extern "C" {
 #endif
 
-#include "../../../NativeLogger/native_logger.h"    
+#include "native_logger.h"
+
+    typedef enum
+    {
+        InvalidArgs = -1, 
+        Success = 0,
+        Exception = 1
+    } Status;
     
+    WPDLIB_API Status wpd_repack(char* inputWpdDir);
+    WPDLIB_API Status wpd_unpack(char* inputWdpFile);
     
     
 #ifdef __cplusplus

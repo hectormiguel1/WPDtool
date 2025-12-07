@@ -184,7 +184,7 @@ public static class Actions
                         outWPDdataStream.PadNull((int)nullBytesAmount);
                     }
 
-                    NativeLogger.Debug($"Repacked {currentFile}");
+                    Log.Debug($"Repacked {currentFile}");
 
                     recordDataStartPos += currentFileSize;
                     readStartPos += 32;
@@ -192,7 +192,7 @@ public static class Actions
                 }
             }
 
-            NativeLogger.Info($"Finished repacking record files to \"{outWPDfile}\"");
+            Log.Info($"Finished repacking record files to \"{outWPDfile}\"");
         }
 
 
@@ -212,6 +212,7 @@ public static class Actions
                 File.Delete(fileToDelete);
             }
         }
+        
         public static void Unpack(string inWPDfile)
         {
             var wpdFileName = Path.GetFileName(inWPDfile);
@@ -250,7 +251,7 @@ public static class Actions
 
                     if (!wpdHeader.Equals("WPD"))
                     {
-                        NativeLogger.Error("Not a valid WPD file");
+                        Log.Error("Not a valid WPD file");
                         throw new InvalidDataException("Not a valid WPD file");
                     }
 
@@ -258,7 +259,7 @@ public static class Actions
                     var totalRecords = wpdReader.ReadBytesUInt32(true);
                     uint readStartPos = 16;
 
-                    NativeLogger.Info("Writing record list....");
+                    Log.Info("Writing record list....");
                     using (var recordListWriter = new StreamWriter(Path.Combine(extractWPDdir, SharedMethods.RecordsList), true, Encoding.UTF8))
                     {
                         recordListWriter.WriteLine(totalRecords);
@@ -306,7 +307,7 @@ public static class Actions
                         currentRecordExtension = currentRecordExtension == "." ? "" : currentRecordExtension;
 
                         var currentOutFile = Path.Combine(extractWPDdir, recordNameAdjusted + currentRecordExtension);
-                        NativeLogger.Debug("Unpacking " + currentOutFile);
+                        Log.Debug("Unpacking " + currentOutFile);
 
                         using (var ofs = new FileStream(currentOutFile, FileMode.OpenOrCreate, FileAccess.Write))
                         {
@@ -327,7 +328,7 @@ public static class Actions
                 }
             }
 
-            NativeLogger.Info($"Finished unpacking file \"{Path.GetFileName(inWPDfile)}\"");
+            Log.Info($"Finished unpacking file \"{Path.GetFileName(inWPDfile)}\"");
         }
 
 

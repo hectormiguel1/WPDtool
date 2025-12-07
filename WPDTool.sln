@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPD.Lib", "WPD.Lib\WPD.Lib.csproj", "{037EDA12-91B8-4F58-ACD2-CB43D189BDB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMGBlibrary", "..\IMGBlibrary\IMGBlibrary.csproj", "{64E19F94-8241-4298-9E68-772C0055F0C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMGBlibrary", "..\IMGBlibrary\IMGBlibrary.projitems", "{64E19F94-8241-4298-9E68-772C0055F0C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPDtool", "WPDtool\WPDtool.csproj", "{023C621D-CCE0-454B-9256-C67E4B4BD51E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeLogger", "..\NativeLogger\NativeLogger.csproj", "{6B0F84F1-8026-4AB5-A6F7-806467F5F03C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeLogger", "..\NativeLogger\NativeLogger.projitems", "{6B0F84F1-8026-4AB5-A6F7-806467F5F03C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
