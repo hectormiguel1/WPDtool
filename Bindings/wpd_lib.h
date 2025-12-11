@@ -29,8 +29,8 @@ extern "C" {
         Exception = 2
     } Status;
     
-    WPDLIB_API Result wpd_repack(char* inputWpdDir);
-    WPDLIB_API Result wpd_unpack(char* inputWdpFile);
+    WPDLIB_API Result NATIVE_CDECL wpd_repack(char* inputWpdDir);
+    WPDLIB_API Result NATIVE_CDECL wpd_unpack(char* inputWpdFile);
     
     
 #ifdef __cplusplus
