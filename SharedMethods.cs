@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Native;
 
 namespace WPD
 {
@@ -8,7 +7,7 @@ namespace WPD
     {
         public static void ErrorExit(string errorMsg)
         {
-            Log.Error(errorMsg);
+            Log.Fatal(errorMsg);
             throw new Exception(errorMsg);
         }
 

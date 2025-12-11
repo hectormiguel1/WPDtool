@@ -184,7 +184,7 @@ public static class Actions
                         outWPDdataStream.PadNull((int)nullBytesAmount);
                     }
 
-                    Log.Debug($"Repacked {currentFile}");
+                    Log.Fine($"Repacked {currentFile}");
 
                     recordDataStartPos += currentFileSize;
                     readStartPos += 32;
@@ -251,7 +251,7 @@ public static class Actions
 
                     if (!wpdHeader.Equals("WPD"))
                     {
-                        Log.Error("Not a valid WPD file");
+                        Log.Fatal("Not a valid WPD file");
                         throw new InvalidDataException("Not a valid WPD file");
                     }
 
@@ -307,7 +307,7 @@ public static class Actions
                         currentRecordExtension = currentRecordExtension == "." ? "" : currentRecordExtension;
 
                         var currentOutFile = Path.Combine(extractWPDdir, recordNameAdjusted + currentRecordExtension);
-                        Log.Debug("Unpacking " + currentOutFile);
+                        Log.Fine("Unpacking " + currentOutFile);
 
                         using (var ofs = new FileStream(currentOutFile, FileMode.OpenOrCreate, FileAccess.Write))
                         {

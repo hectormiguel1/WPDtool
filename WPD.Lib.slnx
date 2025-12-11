@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../IMGBlibrary/IMGBlibrary.shproj" />
+  <Project Path="WPD.Lib.csproj" />
+</Solution>
